@@ -57,7 +57,7 @@ export const BlogHomePage = () => {
       <div className={styles.postList}>
         {MOCK_POSTS.map((post) => (
           <article key={post.id} className={styles.postCard}>
-            <Link to={`/blog/post/${post.id}`} className={styles.postLink}>
+            <Link to={`/post/${post.id}`} className={styles.postLink}>
               <h2 className={styles.postTitle}>
                 <span className={styles.category}>[{post.category}]</span>
                 {post.title}

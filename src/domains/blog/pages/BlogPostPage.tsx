@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { Post, AdjacentPosts, TableOfContentsSection } from '../types';
 import { extractTableOfContents } from '../utils';
 import styles from './BlogPostPage.module.css';
@@ -80,7 +80,6 @@ const MOCK_ADJACENT: AdjacentPosts = {
 };
 
 export const BlogPostPage = () => {
-  const { id } = useParams<{ id: string }>();
 
   // TODO: id로 실제 데이터 조회
   const post = MOCK_POST;
@@ -158,7 +157,7 @@ export const BlogPostPage = () => {
       {/* 이전/다음 게시글 */}
       <nav className={styles.navigation}>
         {adjacent.prev ? (
-          <Link to={`/blog/post/${adjacent.prev.id}`} className={styles.navLink}>
+          <Link to={`/post/${adjacent.prev.id}`} className={styles.navLink}>
             <span className={styles.navDirection}>이전 글</span>
             <span className={styles.navTitle}>
               <span className={styles.navCategory}>[{adjacent.prev.category}]</span>
@@ -170,7 +169,7 @@ export const BlogPostPage = () => {
         )}
         
         {adjacent.next ? (
-          <Link to={`/blog/post/${adjacent.next.id}`} className={`${styles.navLink} ${styles.navNext}`}>
+          <Link to={`/post/${adjacent.next.id}`} className={`${styles.navLink} ${styles.navNext}`}>
             <span className={styles.navDirection}>다음 글</span>
             <span className={styles.navTitle}>
               <span className={styles.navCategory}>[{adjacent.next.category}]</span>
