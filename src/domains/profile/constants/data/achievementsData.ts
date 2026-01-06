@@ -2,7 +2,7 @@
 // 🎯 Achievements 데이터 (프로젝트 상세용)
 // ========================================
 
-import type { AchievementData } from '@/types/portfolio';
+import type { AchievementData } from '../../types';
 
 export const achievementsData: AchievementData[] = [
   // ========================================

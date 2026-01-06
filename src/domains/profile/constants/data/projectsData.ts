@@ -2,7 +2,7 @@
 // 🎯 Projects 데이터
 // ========================================
 
-import type { ProjectData } from '@/types/portfolio';
+import type { ProjectData } from '../../types';
 
 export const projectsData: ProjectData[] = [
 

@@ -2,7 +2,7 @@
 // 🎯 Skills 데이터
 // ========================================
 
-import type { SkillGroup } from '@/types/portfolio';
+import type { SkillGroup } from '../../types';
 
 export const skillsData: SkillGroup[] = [
   {

@@ -4,8 +4,8 @@ import {
   HeroSection, 
   ProjectsSection, 
   Section, 
-  SkillsSection, } from '../components/section';
-import { StickyHeader } from '../components/header'
+  SkillsSection, 
+  StickyHeader} from '../components';
 import { portfolioData } from '../constants';
 import styles from './ProfilePage.module.css';
 

@@ -2,7 +2,7 @@
 // 🎯 Archiving 데이터
 // ========================================
 
-import type { ArchivingItem } from '@/types/portfolio';
+import type { ArchivingItem } from '../../types';
 
 export const archivingData: ArchivingItem[] = [
   {

@@ -3,7 +3,7 @@
 // ========================================
 
 import { projectsData, achievementsData } from './data';
-import type { ProjectData, AchievementData } from '@/types/portfolio';
+import type { ProjectData, AchievementData } from '../types';
 
 /**
  * 프로젝트 ID로 프로젝트 찾기

@@ -2,7 +2,7 @@
 // 🎯 Hero 섹션 데이터
 // ========================================
 
-import type { HeroData } from '@/types/portfolio';
+import type { HeroData } from '../../types';
 
 export const heroData: HeroData = {
   headline: {

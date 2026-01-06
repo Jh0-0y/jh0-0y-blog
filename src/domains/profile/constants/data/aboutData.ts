@@ -2,7 +2,7 @@
 // 🎯 About Me 데이터
 // ========================================
 
-import type { AboutData } from '@/types/portfolio';
+import type { AboutData } from '../../types';
 
 export const aboutData: AboutData = {
   name: '정현영',

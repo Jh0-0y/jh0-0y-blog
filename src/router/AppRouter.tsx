@@ -4,7 +4,7 @@ import { BlogHomePage, BlogPostPage, BlogWritePage } from '@/domains/blog/pages'
 import { LoginPage, SignUpPage } from '@/domains/auth/pages';
 import { NotFoundPage } from '@/pages/notfound';
 import { ProtectedRoute, GuestRoute } from '@/router/guards';
-import { ProfilePage, ProjectDetailPage } from '@/domains/profile/pages';
+import { ProfilePage } from '@/domains/profile/pages';
 
 export const AppRouter = () => (
   <BrowserRouter basename="/">
@@ -29,7 +29,7 @@ export const AppRouter = () => (
 
       {/* 프로필 (공개) */}
       <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/project/:id" element={<ProjectDetailPage />} />
+      {/* <Route path="/project/:id" element={<ProjectDetailPage />} /> */}
 
       {/* 로그인/회원가입 (비로그인만) */}
       <Route path="/login" element={

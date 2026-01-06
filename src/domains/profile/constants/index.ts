@@ -31,7 +31,7 @@ import {
   projectsData,
   achievementsData,
 } from './data';
-import type { PortfolioData } from '@/types/portfolio';
+import type { PortfolioData } from '../types';
 
 export const portfolioData: PortfolioData = {
   hero: heroData,
