@@ -1,4 +1,8 @@
-import type { PostCategory, PostStatus } from './common.types';
+export type PostCategory = 
+  'STUDY' | 'ARCHITECTURE' | 'TROUBLESHOOTING' | 'ESSAY';
+
+export type PostStatus = 
+  'PUBLIC' | 'PRIVATE';
 
 // 게시글
 export interface Post {

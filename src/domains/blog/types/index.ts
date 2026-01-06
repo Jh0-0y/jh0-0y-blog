@@ -1,7 +1,9 @@
-export type { PostCategory, PostStatus } from './common.types';
+export type { 
+  PostCategory, 
+  PostStatus, 
+  Post, 
+  TableOfContentsSection, 
+  AdjacentPosts } from './post.types';
 export type {
-  Post,
-  TableOfContentsSection,
-  AdjacentPosts,
-} from './post.types';
-export type { PostFormData } from './postForm.types';
+  TagGroup
+} from './tag.types';
