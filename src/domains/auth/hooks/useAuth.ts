@@ -2,11 +2,12 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { authApi } from '@/services/auth/auth.api';
+import type { UserInfo } from '@/services/auth';
 
 interface UseAuthReturn {
   // 상태
   isAuthenticated: boolean;
-  user: ReturnType<typeof useAuthStore>['user'];
+  user: UserInfo | null;
   
   // 액션
   logout: () => void;
