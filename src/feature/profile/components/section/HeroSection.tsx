@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { FiSun, FiMoon, FiDownload } from 'react-icons/fi';
-import { useDarkMode } from '@/hooks';
+import { useDarkMode } from '@/hooks/common';
 
 
 import styles from './HeroSection.module.css';

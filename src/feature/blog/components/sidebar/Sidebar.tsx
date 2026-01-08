@@ -126,6 +126,72 @@ export const Sidebar = () => {
               </div>
             </div>
 
+                {/* Area 그룹 */}
+            <div className={styles.tagGroup}>
+              <div className={styles.groupHeader}>
+                <span className={`${styles.groupDot} ${styles.area}`} />
+                <span className={styles.groupLabel}>Area</span>
+              </div>
+              <div className={styles.groupTags}>
+                <button className={styles.tag}>
+                  <span>Backend</span>
+                  <span className={styles.tagCountSmall}>15</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>Frontend</span>
+                  <span className={styles.tagCountSmall}>8</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>DevOps</span>
+                  <span className={styles.tagCountSmall}>4</span>
+                </button>
+              </div>
+            </div>
+
+                {/* Area 그룹 */}
+            <div className={styles.tagGroup}>
+              <div className={styles.groupHeader}>
+                <span className={`${styles.groupDot} ${styles.area}`} />
+                <span className={styles.groupLabel}>Area</span>
+              </div>
+              <div className={styles.groupTags}>
+                <button className={styles.tag}>
+                  <span>Backend</span>
+                  <span className={styles.tagCountSmall}>15</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>Frontend</span>
+                  <span className={styles.tagCountSmall}>8</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>DevOps</span>
+                  <span className={styles.tagCountSmall}>4</span>
+                </button>
+              </div>
+            </div>
+
+                {/* Area 그룹 */}
+            <div className={styles.tagGroup}>
+              <div className={styles.groupHeader}>
+                <span className={`${styles.groupDot} ${styles.area}`} />
+                <span className={styles.groupLabel}>Area</span>
+              </div>
+              <div className={styles.groupTags}>
+                <button className={styles.tag}>
+                  <span>Backend</span>
+                  <span className={styles.tagCountSmall}>15</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>Frontend</span>
+                  <span className={styles.tagCountSmall}>8</span>
+                </button>
+                <button className={styles.tag}>
+                  <span>DevOps</span>
+                  <span className={styles.tagCountSmall}>4</span>
+                </button>
+              </div>
+            </div>
+
             {/* Topic 그룹 */}
             <div className={styles.tagGroup}>
               <div className={styles.groupHeader}>
