@@ -1,46 +1,42 @@
 import { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import type { PostCategory, PostStatus } from '../types';
+import { Link, useParams } from 'react-router-dom';
+import { usePostWrite } from '../hooks/usePostWrite';
+import type { PostCategory } from '../types';
 import { MarkdownEditor } from '../components';
 import styles from './BlogWritePage.module.css';
 
 // 카테고리 옵션
 const CATEGORIES: { value: PostCategory; label: string }[] = [
-  { value: 'STUDY', label: 'Study' },
+  { value: 'CORE', label: 'Core' },
   { value: 'ARCHITECTURE', label: 'Architecture' },
   { value: 'TROUBLESHOOTING', label: 'Troubleshooting' },
   { value: 'ESSAY', label: 'Essay' },
 ];
 
-// TODO: 수정 모드일 때 기존 데이터 로드
-const INITIAL_FORM = {
-  title: '',
-  excerpt: '',
-  category: 'Study' as PostCategory,
-  tags: [] as string[],
-  content: '',
-  status: 'private' as PostStatus,
-};
-
 export const BlogWritePage = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const isEditMode = Boolean(id);
+  const postId = id ? parseInt(id, 10) : undefined;
+  const isEditMode = Boolean(postId);
 
-  // 폼 상태
-  const [form, setForm] = useState(INITIAL_FORM);
+  const {
+    form,
+    isLoading,
+    isFetching,
+    error,
+    fieldErrors,
+    updateField,
+    addTag,
+    removeTag,
+    submit,
+    toggleStatus,
+  } = usePostWrite(postId);
+
   const [tagInput, setTagInput] = useState('');
 
-  // 필드 업데이트
-  const updateField = <K extends keyof typeof form>(key: K, value: typeof form[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
   // 태그 추가
-  const addTag = () => {
-    const tag = tagInput.trim();
-    if (tag && !form.tags.includes(tag)) {
-      updateField('tags', [...form.tags, tag]);
+  const handleAddTag = () => {
+    if (tagInput.trim()) {
+      addTag(tagInput.trim());
       setTagInput('');
     }
   };
@@ -49,25 +45,24 @@ export const BlogWritePage = () => {
   const handleTagKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      addTag();
+      handleAddTag();
     }
-  };
-
-  // 태그 삭제
-  const removeTag = (tagToRemove: string) => {
-    updateField('tags', form.tags.filter((tag) => tag !== tagToRemove));
   };
 
   // 저장
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // TODO: API 호출
-    console.log('저장할 데이터:', form);
-    
-    // 저장 후 상세 페이지 또는 목록으로 이동
-    navigate('/blog');
+    submit();
   };
+
+  // 데이터 로딩 중 (수정 모드)
+  if (isFetching) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.loading}>게시글을 불러오는 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -86,7 +81,7 @@ export const BlogWritePage = () => {
           {/* 공개/비공개 토글 */}
           <button
             type="button"
-            onClick={() => updateField('status', form.status === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC')}
+            onClick={toggleStatus}
             className={`${styles.statusToggle} ${form.status === 'PUBLIC' ? styles.public : ''}`}
           >
             {form.status === 'PUBLIC' ? (
@@ -108,6 +103,13 @@ export const BlogWritePage = () => {
           </button>
         </div>
       </header>
+
+      {/* 에러 메시지 */}
+      {error && (
+        <div className={styles.errorMessage}>
+          {error}
+        </div>
+      )}
 
       {/* 폼 */}
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -135,9 +137,12 @@ export const BlogWritePage = () => {
             value={form.title}
             onChange={(e) => updateField('title', e.target.value)}
             placeholder="제목을 입력하세요"
-            className={styles.titleInput}
+            className={`${styles.titleInput} ${fieldErrors?.title ? styles.inputError : ''}`}
             required
           />
+          {fieldErrors?.title && (
+            <span className={styles.fieldError}>{fieldErrors.title}</span>
+          )}
         </div>
 
         {/* 요약 */}
@@ -146,9 +151,12 @@ export const BlogWritePage = () => {
             value={form.excerpt}
             onChange={(e) => updateField('excerpt', e.target.value)}
             placeholder="글을 간단히 요약해주세요 (목록에 표시됩니다)"
-            className={styles.excerptInput}
+            className={`${styles.excerptInput} ${fieldErrors?.excerpt ? styles.inputError : ''}`}
             rows={2}
           />
+          {fieldErrors?.excerpt && (
+            <span className={styles.fieldError}>{fieldErrors.excerpt}</span>
+          )}
         </div>
 
         {/* 태그 */}
@@ -165,7 +173,7 @@ export const BlogWritePage = () => {
             />
             <button
               type="button"
-              onClick={addTag}
+              onClick={handleAddTag}
               className={styles.tagAddButton}
             >
               추가
@@ -197,6 +205,9 @@ export const BlogWritePage = () => {
             onChange={(value) => updateField('content', value)}
             placeholder="내용을 작성하세요... (마크다운을 지원합니다)"
           />
+          {fieldErrors?.content && (
+            <span className={styles.fieldError}>{fieldErrors.content}</span>
+          )}
         </div>
 
         {/* 하단 액션 */}
@@ -204,8 +215,18 @@ export const BlogWritePage = () => {
           <Link to="/blog" className={styles.cancelButton}>
             취소
           </Link>
-          <button type="submit" className={styles.submitButton}>
-            {isEditMode ? '수정하기' : '발행하기'}
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className={styles.loadingSpinner} />
+            ) : isEditMode ? (
+              '수정하기'
+            ) : (
+              '발행하기'
+            )}
           </button>
         </div>
       </form>

@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { BlogLayout } from '@/domains/blog/layouts/BlogLayout';
-import { BlogHomePage, BlogPostPage, BlogWritePage } from '@/domains/blog/pages';
-import { LoginPage, SignUpPage } from '@/domains/auth/pages';
-import { NotFoundPage } from '@/pages/notfound';
 import { ProtectedRoute, GuestRoute } from '@/router/guards';
-import { ProfilePage } from '@/domains/profile/pages';
+
+import { BlogLayout } from '@/feature/blog/layouts/BlogLayout';
+import { BlogHomePage, BlogPostPage, BlogWritePage } from '@/feature/blog/pages';
+
+import { LoginPage, SignUpPage } from '@/pages/auth';
+import { ProfilePage } from '@/feature/profile/pages';
+
+import { NotFoundPage } from '@/pages/notfound';
 
 export const AppRouter = () => (
   <BrowserRouter basename="/">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FiSun, FiMoon, FiDownload } from 'react-icons/fi';
-import { useDarkMode } from '@/hooks/common';
+import { useDarkMode } from '@/utils';
 
 import styles from './StickyHeader.module.css';
 import { aboutData, PORTFOLIO_SECTIONS } from '../../constants';

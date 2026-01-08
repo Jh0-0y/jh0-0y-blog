@@ -1,13 +1,5 @@
-export interface TokenResponse {
-  accessToken: string;
-  refreshToken: string;
-  accessTokenExpiresIn: number;
-  user: UserInfo;
-}
+import type { UserInfo } from "@/types/user.types";
 
-export interface UserInfo {
-  id: number;
-  email: string;
-  nickname: string;
-  role: 'ADMIN' | 'USER';
+export interface LoginResponse {
+  user: UserInfo;
 }

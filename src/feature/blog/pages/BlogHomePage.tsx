@@ -1,48 +1,32 @@
 import { Link } from 'react-router-dom';
-import type { Post } from '../types';
+import { usePosts } from '../hooks/usePosts';
+import { formatDate, calculateReadTime } from '../utils';
 import styles from './BlogHomePage.module.css';
 
-// TODO: 실제 데이터로 교체
-const MOCK_POSTS: Post[] = [
-  {
-    id: 1,
-    title: 'Spring Boot에서 WebSocket 실시간 통신 구현하기',
-    excerpt: 'STOMP 프로토콜을 활용한 실시간 양방향 통신 구현 과정과 트러블슈팅 경험을 공유합니다.',
-    category: 'STUDY',
-    tags: ['Spring Boot', 'WebSocket', 'STOMP'],
-    date: '2025-01-03',
-    readTime: '8분',
-  },
-  {
-    id: 2,
-    title: 'Redis를 활용한 세션 클러스터링',
-    excerpt: 'MSA 환경에서 Redis를 이용해 세션을 공유하고 관리하는 방법을 알아봅니다.',
-    category: 'ARCHITECTURE',
-    tags: ['Redis', 'Spring Boot', 'MSA'],
-    date: '2024-12-28',
-    readTime: '6분',
-  },
-  {
-    id: 3,
-    title: 'WebSocket 연결이 자꾸 끊어지는 문제 해결',
-    excerpt: 'Heartbeat 설정과 reconnect 로직으로 불안정한 WebSocket 연결 문제를 해결한 과정입니다.',
-    category: 'TROUBLESHOOTING',
-    tags: ['WebSocket', 'Spring Boot'],
-    date: '2024-12-20',
-    readTime: '5분',
-  },
-  {
-    id: 4,
-    title: '팀 리더로서 첫 프로젝트를 마치며',
-    excerpt: '5명의 팀원과 함께한 한 달간의 프로젝트. 기술보다 더 어려웠던 것들에 대한 이야기.',
-    category: 'ESSAY',
-    tags: ['회고', '팀워크'],
-    date: '2024-12-15',
-    readTime: '4분',
-  },
-];
-
 export const BlogHomePage = () => {
+  const { posts, pagination, isLoading, error, setPage } = usePosts();
+
+  // 로딩 상태
+  if (isLoading && posts.length === 0) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.loading}>게시글을 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.error}>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>다시 시도</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       {/* 페이지 헤더 */}
@@ -54,34 +38,65 @@ export const BlogHomePage = () => {
       </header>
 
       {/* 게시글 목록 */}
-      <div className={styles.postList}>
-        {MOCK_POSTS.map((post) => (
-          <article key={post.id} className={styles.postCard}>
-            <Link to={`/post/${post.id}`} className={styles.postLink}>
-              <h2 className={styles.postTitle}>
-                <span className={styles.category}>[{post.category}]</span>
-                {post.title}
-              </h2>
-              <p className={styles.postExcerpt}>{post.excerpt}</p>
-              
-              <div className={styles.postMeta}>
-                <div className={styles.postTags}>
-                  {post.tags.map((tag) => (
-                    <span key={tag} className={styles.postTag}>
-                      {tag}
-                    </span>
-                  ))}
+      {posts.length === 0 ? (
+        <div className={styles.empty}>
+          <p>게시글이 없습니다.</p>
+        </div>
+      ) : (
+        <div className={styles.postList}>
+          {posts.map((post) => (
+            <article key={post.id} className={styles.postCard}>
+              <Link to={`/post/${post.id}`} className={styles.postLink}>
+                <h2 className={styles.postTitle}>
+                  <span className={styles.category}>[{post.category}]</span>
+                  {post.title}
+                </h2>
+                <p className={styles.postExcerpt}>{post.excerpt}</p>
+
+                <div className={styles.postMeta}>
+                  <div className={styles.postTags}>
+                    {post.tags.map((tag) => (
+                      <span key={tag} className={styles.postTag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className={styles.postInfo}>
+                    <span>{formatDate(post.createdAt)}</span>
+                    <span className={styles.dot}>·</span>
+                    <span>{calculateReadTime(post.excerpt)}</span>
+                  </div>
                 </div>
-                <div className={styles.postInfo}>
-                  <span>{post.date}</span>
-                  <span className={styles.dot}>·</span>
-                  <span>{post.readTime}</span>
-                </div>
-              </div>
-            </Link>
-          </article>
-        ))}
-      </div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {/* 페이지네이션 */}
+      {pagination.totalPages > 1 && (
+        <nav className={styles.pagination}>
+          <button
+            className={styles.pageButton}
+            onClick={() => setPage(pagination.page - 1)}
+            disabled={!pagination.hasPrevious}
+          >
+            이전
+          </button>
+
+          <span className={styles.pageInfo}>
+            {pagination.page + 1} / {pagination.totalPages}
+          </span>
+
+          <button
+            className={styles.pageButton}
+            onClick={() => setPage(pagination.page + 1)}
+            disabled={!pagination.hasNext}
+          >
+            다음
+          </button>
+        </nav>
+      )}
     </div>
   );
 };

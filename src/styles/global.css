@@ -13,25 +13,6 @@ body {
     color var(--transition-base);
 }
 
-/* 스크롤바 스타일 (선택사항) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-gray-400);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-500);
-}
-
 /* 선택 영역 스타일 */
 ::selection {
   background-color: var(--color-primary-500);
