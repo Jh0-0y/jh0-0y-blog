@@ -1,19 +1,35 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getErrorMessage } from '@/services/core/api.error';
 import { postApi } from '../api/post.api';
 import type { PostListItem } from '../api/post.response';
 import type { PostType } from '../types/post.enums';
+import type { StackGroup } from '../types/stack.enums';
 
+// PostType 검증
 const POST_TYPES: PostType[] = ['CORE', 'ARCHITECTURE', 'TROUBLESHOOTING', 'ESSAY'];
 
-const isPostType = (value: string | null): value is PostType => {
-  return value !== null && POST_TYPES.includes(value as PostType);
+const isPostType = (value: string | undefined): boolean => {
+  if (!value) return false;
+  return POST_TYPES.includes(value.toUpperCase() as PostType);
+};
+
+const toPostType = (value: string): PostType => {
+  return value.toUpperCase() as PostType;
+};
+
+// StackGroup 검증
+const STACK_GROUPS: StackGroup[] = ['LANGUAGE', 'FRAMEWORK', 'LIBRARY', 'DATABASE', 'DEVOPS', 'TOOL', 'ETC'];
+
+const isStackGroup = (value: string | undefined): boolean => {
+  if (!value) return false;
+  return STACK_GROUPS.map((g) => g.toLowerCase()).includes(value.toLowerCase());
 };
 
 export interface PostsFilter {
   postType?: PostType;
   stack?: string;
+  group?: string;
   keyword?: string;
 }
 
@@ -32,14 +48,15 @@ export interface UsePostsReturn {
   isLoading: boolean;
   error: string | null;
   filter: PostsFilter;
-  setFilter: (filter: PostsFilter) => void;
   setPage: (page: number) => void;
   refetch: () => Promise<void>;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export const usePosts = (initialFilter?: PostsFilter): UsePostsReturn => {
+export const usePosts = (): UsePostsReturn => {
+  // URL path params: /:postType, /:group/:stack, /:group/:stack/:postType
+  const params = useParams<{ postType?: string; group?: string; stack?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [posts, setPosts] = useState<PostListItem[]>([]);
@@ -54,16 +71,37 @@ export const usePosts = (initialFilter?: PostsFilter): UsePostsReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // URL에서 필터 읽기
+  // URL에서 필터 파싱
   const getFilterFromURL = useCallback((): PostsFilter => {
-    const postTypeParam = searchParams.get('postType');
+    const { postType: postTypeParam, group: groupParam, stack: stackParam } = params;
+    const keyword = searchParams.get('q') || undefined;
 
-    return {
-      postType: isPostType(postTypeParam) ? postTypeParam : initialFilter?.postType,
-      stack: searchParams.get('stack') || initialFilter?.stack,
-      keyword: searchParams.get('keyword') || initialFilter?.keyword,
-    };
-  }, [searchParams, initialFilter]);
+    let postType: PostType | undefined;
+    let stack: string | undefined;
+    let group: string | undefined;
+
+    // Case 1: /:postType (예: /core)
+    if (postTypeParam && !groupParam && !stackParam) {
+      if (isPostType(postTypeParam)) {
+        postType = toPostType(postTypeParam);
+      }
+    }
+
+    // Case 2: /:group/:stack (예: /language/java)
+    if (groupParam && stackParam) {
+      if (isStackGroup(groupParam)) {
+        group = groupParam.toLowerCase();
+        stack = stackParam;
+      }
+    }
+
+    // Case 3: /:group/:stack/:postType (예: /language/java/core)
+    if (groupParam && stackParam && postTypeParam && isPostType(postTypeParam)) {
+      postType = toPostType(postTypeParam);
+    }
+
+    return { postType, stack, group, keyword };
+  }, [params, searchParams]);
 
   // URL에서 페이지 읽기
   const getPageFromURL = useCallback((): number => {
@@ -79,6 +117,7 @@ export const usePosts = (initialFilter?: PostsFilter): UsePostsReturn => {
     setError(null);
 
     try {
+      // 백엔드 요청은 기존 query params 방식 유지
       const response = await postApi.getPosts({
         page: currentPage,
         size: pagination.size,
@@ -111,37 +150,21 @@ export const usePosts = (initialFilter?: PostsFilter): UsePostsReturn => {
     fetchPosts();
   }, [fetchPosts]);
 
-  // URL 파라미터 업데이트 헬퍼
-  const updateSearchParams = useCallback((updates: Record<string, string | null>) => {
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev);
-
-      Object.entries(updates).forEach(([key, value]) => {
-        if (value) {
-          newParams.set(key, value);
+  // 페이지 변경 (query string으로)
+  const setPage = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        if (page > 0) {
+          newParams.set('page', String(page));
         } else {
-          newParams.delete(key);
+          newParams.delete('page');
         }
+        return newParams;
       });
-
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const handleSetFilter = useCallback((newFilter: PostsFilter) => {
-    updateSearchParams({
-      postType: newFilter.postType || null,
-      stack: newFilter.stack || null,
-      keyword: newFilter.keyword || null,
-      page: null, // 필터 변경 시 페이지 리셋
-    });
-  }, [updateSearchParams]);
-
-  const setPage = useCallback((page: number) => {
-    updateSearchParams({
-      page: page > 0 ? String(page) : null,
-    });
-  }, [updateSearchParams]);
+    },
+    [setSearchParams]
+  );
 
   return {
     posts,
@@ -152,7 +175,6 @@ export const usePosts = (initialFilter?: PostsFilter): UsePostsReturn => {
     isLoading,
     error,
     filter,
-    setFilter: handleSetFilter,
     setPage,
     refetch: fetchPosts,
   };

@@ -1,6 +1,7 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useStacksSidebar } from '../../hooks/useStacksSidebar';
 import { STACK_GROUP_LABELS, STACK_GROUP_ORDER } from '../../types/stack.enums';
+import type { StackGroup } from '../../types/stack.enums';
 import { SearchBar } from './SearchBar';
 import styles from './Sidebar.module.css';
 import { LogoutButton } from '@/components/logoutButton/LogoutButton';
@@ -11,47 +12,60 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const params = useParams<{ postType?: string; group?: string; stack?: string }>();
+  const [searchParams] = useSearchParams();
   const { popularStacks, groupedStacks, isLoading } = useStacksSidebar();
 
-  // 현재 선택된 스택 (URL에서 읽기)
-  const selectedStack = searchParams.get('stack');
+  // 현재 선택된 스택 (URL path에서 읽기)
+  const selectedStack = params.stack || null;
+  const selectedGroup = params.group || null;
 
   // 스택 클릭 핸들러
-  const handleStackClick = (stackName: string) => {
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev);
+  const handleStackClick = (stackName: string, stackGroup: StackGroup) => {
+    const groupPath = stackGroup.toLowerCase();
+    const keyword = searchParams.get('q');
 
-      if (selectedStack === stackName) {
-        // 이미 선택된 스택이면 해제
-        newParams.delete('stack');
-      } else {
-        // 새 스택 선택
-        newParams.set('stack', stackName);
+    // 이미 선택된 스택이면 해제 (홈으로)
+    if (selectedStack === stackName) {
+      navigate(keyword ? `/?q=${keyword}` : '/');
+    } else {
+      // 새 스택 선택
+      const basePath = `/${groupPath}/${stackName}`;
+      navigate(keyword ? `${basePath}?q=${keyword}` : basePath);
+    }
+  };
+
+  // 인기 스택 클릭 (그룹 정보가 없으므로 groupedStacks에서 찾아야 함)
+  const handlePopularStackClick = (stackName: string) => {
+    if (selectedStack === stackName) {
+      const keyword = searchParams.get('q');
+      navigate(keyword ? `/?q=${keyword}` : '/');
+      return;
+    }
+
+    // groupedStacks에서 해당 스택의 그룹 찾기
+    if (groupedStacks) {
+      for (const group of STACK_GROUP_ORDER) {
+        const stacks = groupedStacks[group];
+        if (stacks?.some((s) => s.name === stackName)) {
+          const groupPath = group.toLowerCase();
+          const keyword = searchParams.get('q');
+          const basePath = `/${groupPath}/${stackName}`;
+          navigate(keyword ? `${basePath}?q=${keyword}` : basePath);
+          return;
+        }
       }
-
-      // 페이지 리셋
-      newParams.delete('page');
-
-      return newParams;
-    });
+    }
   };
 
   // 필터 초기화
   const handleClearFilter = () => {
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev);
-      newParams.delete('stack');
-      newParams.delete('keyword');
-      newParams.delete('postType');
-      newParams.delete('page');
-      return newParams;
-    });
+    navigate('/');
   };
 
   // 활성 필터 여부
-  const hasActiveFilter =
-    searchParams.has('stack') || searchParams.has('keyword') || searchParams.has('postType');
+  const hasActiveFilter = !!selectedStack || !!params.postType || searchParams.has('q');
 
   return (
     <>
@@ -59,12 +73,15 @@ export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
       {isOpen && <div className={styles.overlay} onClick={onClose} />}
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-        {/* 로고/홈 */}
-        <div className={styles.header}>
-          <Link to="/" className={styles.logo}>
-            hyunyoung.dev
+        {/* 프로필 카드 */}
+        <div className={styles.profileCard}>
+          <Link to="/" className={styles.profileLink}>
+            <div className={styles.avatarWrapper}>
+              <img src="/images/profile.png" alt="Profile" className={styles.avatar} />
+            </div>
+            <h1 className={styles.name}>정현영</h1>
+            <p className={styles.role}>Junior Backend Developer</p>
           </Link>
-          <p className={styles.subtitle}>Junior Backend Developer</p>
           <LogoutButton />
         </div>
 
@@ -90,7 +107,7 @@ export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
                         className={`${styles.popularStack} ${
                           selectedStack === stack.name ? styles.active : ''
                         }`}
-                        onClick={() => handleStackClick(stack.name)}
+                        onClick={() => handlePopularStackClick(stack.name)}
                       >
                         <span className={styles.tagRank}>{stack.rank}</span>
                         <span className={styles.tagName}>{stack.name}</span>
@@ -125,7 +142,7 @@ export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
                               className={`${styles.tag} ${
                                 selectedStack === stack.name ? styles.active : ''
                               }`}
-                              onClick={() => handleStackClick(stack.name)}
+                              onClick={() => handleStackClick(stack.name, group)}
                             >
                               <span>{stack.name}</span>
                               <span className={styles.tagCountSmall}>{stack.postCount}</span>

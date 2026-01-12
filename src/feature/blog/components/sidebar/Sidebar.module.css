@@ -38,26 +38,46 @@
   }
 }
 
-/* 헤더 */
-.header {
-  padding: var(--spacing-5);
+/* 프로필 카드 */
+.profileCard {
+  padding: var(--spacing-6) var(--spacing-4);
   border-bottom: 1px solid var(--color-border-light);
+  text-align: center;
 }
 
-.logo {
+.profileLink {
   display: block;
-  font-size: var(--font-size-lg);
+  transition: opacity 0.2s;
+}
+
+.profileLink:hover {
+  opacity: 0.8;
+}
+
+.avatarWrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-3);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-  transition: color 0.2s;
+  margin-bottom: var(--spacing-1);
 }
 
-.logo:hover {
-  color: var(--color-primary-600);
-}
-
-.subtitle {
-  margin-top: var(--spacing-1);
+.role {
   font-size: var(--font-size-xs);
   color: var(--color-gray-400);
 }

@@ -15,15 +15,23 @@ export const AppRouter = () => (
     <Routes>
       {/* 블로그 (공개) */}
       <Route path="/" element={<BlogLayout />}>
+        {/* 전체 글 */}
         <Route index element={<BlogHomePage />} />
+        {/* 필터링된 글 */}
+        <Route path=":postType" element={<BlogHomePage />} />
+        <Route path=":group/:stack" element={<BlogHomePage />} />
+        <Route path=":group/:stack/:postType" element={<BlogHomePage />} />
+        {/* 글 상세 */}
         <Route path="post/:id" element={<BlogPostPage />} />
         
-        {/* 글쓰기/수정 (인증 필요) */}
+        {/* 글쓰기 (인증 필요) */}
         <Route path="write" element={
           <ProtectedRoute>
             <BlogWritePage />
           </ProtectedRoute>
         } />
+        
+        {/* 글 수정 (인증 필요) */}
         <Route path="post/:id/edit" element={
           <ProtectedRoute>
             <BlogEditPage />

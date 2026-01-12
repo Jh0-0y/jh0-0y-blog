@@ -109,6 +109,34 @@
   color: var(--color-text-secondary);
 }
 
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.manageButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+
+.manageButton:hover {
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
+}
+
+.manageButton svg {
+  width: 14px;
+  height: 14px;
+}
+
 .fieldError {
   font-size: var(--font-size-xs);
   color: var(--color-error);

@@ -2,16 +2,28 @@
   width: 100%;
 }
 
-/* 헤더 */
+/* ========== 헤더 ========== */
 .header {
-  margin-bottom: var(--spacing-12);
+  margin-bottom: var(--spacing-8);
+}
+
+.headerTop {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-2);
 }
 
 .title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.02em;
+}
+
+.count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
 }
 
 .description {
@@ -19,53 +31,89 @@
   color: var(--color-text-tertiary);
 }
 
-/* 로딩 */
-.loading {
-  text-align: center;
+/* ========== 탭 ========== */
+.tabs {
+  display: flex;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--color-border-light);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  flex-shrink: 0;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  transition: color 0.15s;
+}
+
+.tab:hover {
+  color: var(--color-text-secondary);
+}
+
+.tab.active {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: var(--spacing-4);
+  right: var(--spacing-4);
+  height: 2px;
+  background: var(--color-text-primary);
+}
+
+/* ========== 로딩/에러/빈 상태 ========== */
+.loading,
+.empty {
   padding: var(--spacing-16) 0;
+  text-align: center;
   color: var(--color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
-/* 에러 */
 .error {
-  text-align: center;
   padding: var(--spacing-16) 0;
+  text-align: center;
+}
+
+.error p {
   color: var(--color-text-tertiary);
   font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-4);
 }
 
 .error button {
-  margin-top: var(--spacing-4);
   padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  background: none;
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: border-color 0.2s;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-base);
+  transition: background-color 0.15s;
 }
 
 .error button:hover {
-  border-color: var(--color-text-tertiary);
+  background: var(--color-bg-tertiary);
 }
 
-/* 빈 상태 */
-.empty {
-  text-align: center;
-  padding: var(--spacing-16) 0;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-sm);
-}
-
-/* 게시글 목록 */
+/* ========== 게시글 목록 ========== */
 .postList {
   display: flex;
   flex-direction: column;
 }
 
-/* 게시글 카드 */
+/* ========== 게시글 카드 ========== */
 .postCard {
   border-bottom: 1px solid var(--color-border-light);
 }
@@ -77,22 +125,36 @@
 .postLink {
   display: block;
   padding: var(--spacing-6) 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s;
 }
 
 .postLink:hover {
   opacity: 0.7;
 }
 
-/* 타입 */
+/* 메타 정보 */
+.postMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
 .postType {
-  display: inline-block;
-  font-size: 11px;
+  color: var(--color-primary-600);
   font-weight: var(--font-weight-medium);
-  color: var(--color-primary-500);
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  margin-bottom: var(--spacing-2);
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.postDate {
+  color: var(--color-text-tertiary);
 }
 
 /* 제목 */
@@ -109,7 +171,7 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   line-height: 1.6;
-  margin: 0 0 var(--spacing-4) 0;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -121,7 +183,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: var(--spacing-3);
+  margin-top: var(--spacing-4);
 }
 
 .postStack {
@@ -132,19 +194,12 @@
   border-radius: var(--radius-sm);
 }
 
-/* 하단 영역 */
-.postFooter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-4);
-}
-
 /* 태그 */
 .postTags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
 }
 
 .postTag {
@@ -152,46 +207,29 @@
   color: var(--color-text-tertiary);
 }
 
-/* 메타 정보 */
-.postMeta {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  font-size: 11px;
-  color: var(--color-text-tertiary);
-  flex-shrink: 0;
-}
-
-.author {
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
-}
-
-.dot {
-  opacity: 0.4;
-}
-
-/* 페이지네이션 */
+/* ========== 페이지네이션 ========== */
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-6);
+  gap: var(--spacing-2);
   margin-top: var(--spacing-12);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .pageButton {
   padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.15s ease;
+  background: transparent;
+  border-radius: var(--radius-base);
+  transition: all 0.15s;
 }
 
 .pageButton:hover:not(:disabled) {
   color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
 }
 
 .pageButton:disabled {
@@ -199,16 +237,52 @@
   cursor: not-allowed;
 }
 
-.pageInfo {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
 }
 
-/* 반응형 */
+.pageNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border-radius: var(--radius-base);
+  transition: all 0.15s;
+}
+
+.pageNumber:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+}
+
+.pageNumber.active {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========== 반응형 ========== */
 @media (max-width: 768px) {
-  .postFooter {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-2);
+  .tabs {
+    margin-left: calc(-1 * var(--spacing-4));
+    margin-right: calc(-1 * var(--spacing-4));
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+  }
+
+  .pageNumbers {
+    order: -1;
+    width: 100%;
+    justify-content: center;
   }
 }
