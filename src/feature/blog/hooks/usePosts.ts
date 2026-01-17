@@ -4,27 +4,7 @@ import { getErrorMessage } from '@/services/core/api.error';
 import { postApi } from '../api/post.api';
 import type { PostListItem } from '../api/post.response';
 import type { PostType } from '../types/post.enums';
-import type { StackGroup } from '../types/stack.enums';
-
-// PostType 검증
-const POST_TYPES: PostType[] = ['CORE', 'ARCHITECTURE', 'TROUBLESHOOTING', 'ESSAY'];
-
-const isPostType = (value: string | undefined): boolean => {
-  if (!value) return false;
-  return POST_TYPES.includes(value.toUpperCase() as PostType);
-};
-
-const toPostType = (value: string): PostType => {
-  return value.toUpperCase() as PostType;
-};
-
-// StackGroup 검증
-const STACK_GROUPS: StackGroup[] = ['LANGUAGE', 'FRAMEWORK', 'LIBRARY', 'DATABASE', 'DEVOPS', 'TOOL', 'ETC'];
-
-const isStackGroup = (value: string | undefined): boolean => {
-  if (!value) return false;
-  return STACK_GROUPS.map((g) => g.toLowerCase()).includes(value.toLowerCase());
-};
+import type { StackGroup } from '../../../services/stack/stack.enums';
 
 export interface PostsFilter {
   postType?: PostType;
@@ -52,7 +32,27 @@ export interface UsePostsReturn {
   refetch: () => Promise<void>;
 }
 
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 6;
+
+// PostType 검증
+const POST_TYPES: PostType[] = ['CORE', 'ARCHITECTURE', 'TROUBLESHOOTING', 'ESSAY'];
+
+const isPostType = (value: string | undefined): boolean => {
+  if (!value) return false;
+  return POST_TYPES.includes(value.toUpperCase() as PostType);
+};
+
+const toPostType = (value: string): PostType => {
+  return value.toUpperCase() as PostType;
+};
+
+// StackGroup 검증
+const STACK_GROUPS: StackGroup[] = ['LANGUAGE', 'FRAMEWORK', 'LIBRARY', 'DATABASE', 'DEVOPS', 'TOOL', 'ETC'];
+
+const isStackGroup = (value: string | undefined): boolean => {
+  if (!value) return false;
+  return STACK_GROUPS.map((g) => g.toLowerCase()).includes(value.toLowerCase());
+};
 
 export const usePosts = (): UsePostsReturn => {
   // URL path params: /:postType, /:group/:stack, /:group/:stack/:postType

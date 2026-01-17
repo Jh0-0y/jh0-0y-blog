@@ -1,7 +1,9 @@
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePosts } from '../hooks/usePosts';
 import { formatDate } from '../utils';
+import { Pagination } from '@/components/pagination/Pagination';
 import type { PostType } from '../types/post.enums';
+import { TypingBanner } from '../components/typingBanner/TypingBanner';
 import styles from './BlogHomePage.module.css';
 
 const POST_TYPE_TABS: { value: PostType | 'ALL'; label: string }[] = [
@@ -11,6 +13,22 @@ const POST_TYPE_TABS: { value: PostType | 'ALL'; label: string }[] = [
   { value: 'TROUBLESHOOTING', label: 'Troubleshooting' },
   { value: 'ESSAY', label: 'Essay' },
 ];
+
+// PostType별 색상
+const POST_TYPE_COLORS: Record<string, { bg: string; text: string }> = {
+  CORE: { bg: 'linear-gradient(135deg, #1a3a1a 0%, #0d1117 100%)', text: '#6ee7b7' },
+  ARCHITECTURE: { bg: 'linear-gradient(135deg, #1a2a3a 0%, #0d1117 100%)', text: '#60a5fa' },
+  TROUBLESHOOTING: { bg: 'linear-gradient(135deg, #3a2a1a 0%, #0d1117 100%)', text: '#f97316' },
+  ESSAY: { bg: 'linear-gradient(135deg, #2a1a3a 0%, #0d1117 100%)', text: '#a78bfa' },
+};
+
+// PostType 아이콘
+const POST_TYPE_ICONS: Record<string, string> = {
+  CORE: '{ }',
+  ARCHITECTURE: '⚙',
+  TROUBLESHOOTING: '🔧',
+  ESSAY: '✎',
+};
 
 export const BlogHomePage = () => {
   const navigate = useNavigate();
@@ -49,7 +67,10 @@ export const BlogHomePage = () => {
   if (isLoading && posts.length === 0) {
     return (
       <div className={styles.page}>
-        <div className={styles.loading}>게시글을 불러오는 중...</div>
+        <div className={styles.loading}>
+          <div className={styles.spinner} />
+          <p>포스트를 불러오는 중...</p>
+        </div>
       </div>
     );
   }
@@ -68,104 +89,129 @@ export const BlogHomePage = () => {
 
   return (
     <div className={styles.page}>
-      {/* 헤더 */}
-      <header className={styles.header}>
-        <div className={styles.headerTop}>
-          <h1 className={styles.title}>Posts</h1>
-          <span className={styles.count}>{pagination.totalElements}</span>
-        </div>
-        <p className={styles.description}>개발하면서 배운 것들을 기록합니다</p>
-      </header>
+      {/* 배너 */}
+      <TypingBanner />
 
-      {/* PostType 탭 */}
-      <nav className={styles.tabs}>
-        {POST_TYPE_TABS.map((tab) => (
-          <button
-            key={tab.value}
-            className={`${styles.tab} ${currentPostType === tab.value ? styles.active : ''}`}
-            onClick={() => handleTabClick(tab.value)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
-
-      {/* 게시글 목록 */}
-      {posts.length === 0 ? (
-        <div className={styles.empty}>
-          <p>게시글이 없습니다</p>
-        </div>
-      ) : (
-        <div className={styles.postList}>
-          {posts.map((post) => (
-            <article key={post.id} className={styles.postCard}>
-              <Link to={`/post/${post.id}`} className={styles.postLink}>
-                <div className={styles.postMeta}>
-                  <span className={styles.postType}>{post.postType}</span>
-                  <span className={styles.dot}>·</span>
-                  <span className={styles.postDate}>{formatDate(post.createdAt)}</span>
-                </div>
-
-                <h2 className={styles.postTitle}>{post.title}</h2>
-                <p className={styles.postExcerpt}>{post.excerpt}</p>
-
-                {post.stacks.length > 0 && (
-                  <div className={styles.postStacks}>
-                    {post.stacks.map((stack) => (
-                      <span key={stack} className={styles.postStack}>
-                        {stack}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {post.tags.length > 0 && (
-                  <div className={styles.postTags}>
-                    {post.tags.map((tag) => (
-                      <span key={tag} className={styles.postTag}>
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </Link>
-            </article>
-          ))}
-        </div>
-      )}
-
-      {/* 페이지네이션 */}
-      {pagination.totalPages > 1 && (
-        <nav className={styles.pagination}>
-          <button
-            className={styles.pageButton}
-            onClick={() => setPage(pagination.page - 1)}
-            disabled={!pagination.hasPrevious}
-          >
-            이전
-          </button>
-
-          <div className={styles.pageNumbers}>
-            {Array.from({ length: pagination.totalPages }, (_, i) => (
+      {/* 섹션 */}
+      <section className={styles.sectionWrap} >
+        <div className={styles.filterHeader}>
+          <h2 className={styles.title}>
+            Latest Posts <span className={styles.count}>({pagination.totalElements})</span>
+          </h2>
+          <nav className={styles.filterTabs}>
+            {POST_TYPE_TABS.map((tab) => (
               <button
-                key={i}
-                className={`${styles.pageNumber} ${pagination.page === i ? styles.active : ''}`}
-                onClick={() => setPage(i)}
+                key={tab.value}
+                className={`${styles.filterBtn} ${currentPostType === tab.value ? styles.active : ''}`}
+                onClick={() => handleTabClick(tab.value)}
               >
-                {i + 1}
+                {tab.label}
               </button>
             ))}
-          </div>
+          </nav>
+        </div>
 
-          <button
-            className={styles.pageButton}
-            onClick={() => setPage(pagination.page + 1)}
-            disabled={!pagination.hasNext}
-          >
-            다음
-          </button>
-        </nav>
-      )}
+        {/* 게시글 목록 */}
+        {posts.length === 0 ? (
+          <div className={styles.noResults}>
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <h3>검색 결과가 없습니다</h3>
+            <p>다른 검색어나 필터를 시도해보세요.</p>
+          </div>
+        ) : (
+          <div className={styles.postGrid}>
+            {posts.map((post, index) => (
+              <article
+                key={post.id}
+                className={styles.postCard}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <Link to={`post/${post.id}`} className={styles.postLink}>
+                  {/* 썸네일 영역 (2/5) */}
+                  <div
+                    className={styles.thumbnail}
+                    style={{
+                      background: post.thumbnailUrl
+                        ? `url(${post.thumbnailUrl}) center/cover`
+                        : POST_TYPE_COLORS[post.postType]?.bg,
+                    }}
+                  >
+                    {!post.thumbnailUrl && (
+                      <span
+                        className={styles.thumbnailIcon}
+                        style={{ color: POST_TYPE_COLORS[post.postType]?.text }}
+                      >
+                        {POST_TYPE_ICONS[post.postType]}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 콘텐츠 영역 (3/5) */}
+                  <div className={styles.cardContent}>
+                    {/* 제목 */}
+                    <h3 className={styles.postTitle}>{post.title}</h3>
+
+                    {/* 설명 */}
+                    <p className={styles.postExcerpt}>{post.excerpt}</p>
+
+                    {/* 스택 */}
+                    {post.stacks.length > 0 && (
+                      <div className={styles.postStacks}>
+                        {post.stacks.slice(0, 3).map((stack) => (
+                          <span key={stack} className={styles.stackBadge}>
+                            {stack}
+                          </span>
+                        ))}
+                        {post.stacks.length > 3 && (
+                          <span className={styles.stackMore}>+{post.stacks.length - 3}</span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* 하단: 태그 + 날짜 */}
+                    <div className={styles.cardFooter}>
+                      <div className={styles.postTags}>
+                        {post.tags.slice(0, 2).map((tag) => (
+                          <span key={tag} className={styles.tagText}>
+                            #{tag}
+                          </span>
+                        ))}
+                        {post.tags.length > 2 && (
+                          <span className={styles.tagMore}>...</span>
+                        )}
+                      </div>
+                      <span className={styles.postDate}>{formatDate(post.createdAt)}</span>
+                    </div>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {/* 페이지네이션 */}
+        {pagination.totalPages > 1 && (
+          <div className={styles.paginationWrapper}>
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+              hasNext={pagination.hasNext}
+              hasPrevious={pagination.hasPrevious}
+            />
+          </div>
+        )}
+      </section>
     </div>
   );
 };

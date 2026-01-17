@@ -2,24 +2,79 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--color-bg-primary);
+  position: relative;
 }
 
 .main {
   flex: 1;
-  max-width: 54rem;
-  margin: 0 auto;
-  padding: var(--spacing-12) var(--spacing-8);
+  margin-left: 240px;
   width: 100%;
 }
 
-@media (max-width: 768px) {
+/* ===================================
+   사이드바
+   =================================== */
+.aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: var(--color-bg-secondary);
+  box-shadow: 4px 0 20px -5px rgba(0, 0, 0, 0.2);
+  z-index: 101;
+  transition: transform 0.3s ease;
+}
+
+.aside.open {
+  transform: translateX(0);
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 920px) {
   .main {
-    padding: var(--spacing-8) var(--spacing-4);
-    padding-top: var(--spacing-16);
+    margin-left: 0;
+  }
+
+  .aside {
+    transform: translateX(-100%); /* 기본적으로 숨김 */
+  }
+
+  .aside.open {
+    transform: translateX(0); /* 열림 상태일 때 등장 */
   }
 }
 
-/* 모바일 메뉴 버튼 */
+/* ===================================
+   사이드바 Overlay
+   =================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .overlay {
+    display: none;
+  }
+}
+
+/* ===================================
+  모바일 메뉴 버튼
+   =================================== */
 .mobileMenuButton {
   position: fixed;
   top: var(--spacing-4);
@@ -28,19 +83,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: var(--color-bg-primary);
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-base);
-  box-shadow: var(--shadow-sm);
-  color: var(--color-gray-600);
-  transition: color 0.2s, background-color 0.2s;
+  border-radius: var(--radius-sm);
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .mobileMenuButton:hover {
-  background-color: var(--color-bg-secondary);
-  color: var(--color-gray-800);
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-hover);
 }
 
 .mobileMenuButton svg {
@@ -48,7 +104,7 @@
   height: 1.25rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 920px) {
   .mobileMenuButton {
     display: none;
   }
@@ -84,7 +140,7 @@
   height: 1.25rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 920px) {
   .writeButton {
     padding: var(--spacing-3);
     border-radius: var(--radius-full);

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserInfo } from '@/types/user.types';
+import type { UserInfo } from '@/services/user/user.types';
 
 interface AuthState {
   // 상태

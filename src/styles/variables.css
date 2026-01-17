@@ -3,51 +3,63 @@
 
 :root {
   /* ===== 색상 ===== */
-  /* ===== Primary Colors ===== */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* ===== Primary Colors (Soft Ocean Blue) ===== */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
 
-  /* ===== Navy Gray Scale ===== */
+  /* ===== Navy Gray Scale (Muted Ocean) ===== */
   --color-gray-50: #f8fafc;
-  --color-gray-100: #eef2f7;
-  --color-gray-200: #dde3ec;
-  --color-gray-300: #c3ccd9;
-  --color-gray-400: #8f9bb3;
-  --color-gray-500: #5f6f8b;
-  --color-gray-600: #45526b;
-  --color-gray-700: #2f3a52;
-  --color-gray-800: #1c253b;
-  --color-gray-900: #0b1220;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
 
-  /* ===== Semantic Colors ===== */
+  /* ===== Semantic Colors (Muted) ===== */
   --color-success: #10b981;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  --color-info: #0ea5e9;
 
-  /* ===== Background ===== */
+  /* ===== Background (Soft Ocean) ===== */
   --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f9fafb;
-  --color-bg-tertiary: #f3f4f6;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+
+  /* Accent Colors (Subtle Ocean Gradients) */
+  --accent-gradient: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%);
+  --header-overlay: rgba(255, 255, 255, 0.2);
+  --banner-overlay: linear-gradient(
+    to bottom,
+    rgba(248, 250, 252, 0.4) 0%,
+    rgba(241, 245, 249, 0.2) 30%,
+    transparent 50%,
+    rgba(226, 232, 240, 0.15) 75%,
+    rgba(203, 213, 225, 0.3) 100%
+  );
 
   /* ===== Text =====*/
-  --color-text-primary: #0b1220;
-  --color-text-secondary: #2f3a52;
-  --color-text-tertiary: #5f6f8b;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #64748b;
   --color-text-inverse: #ffffff;
 
   /* ===== Border ===== */
-  --color-border-light: #dde3ec;
-  --color-border-medium: #c3ccd9;
-  --color-border-dark: #8f9bb3;
+  --color-border-light: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+  --color-border-dark: #94a3b8;
 
   /* ===== 폰트 ===== */
   /* ===== Font Family ===== */
@@ -102,79 +114,93 @@
   --radius-xl: 1.5rem; /* 24px */
   --radius-full: 9999px;
 
-  /* ===== Shadow ===== */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* ===== Shadow (Soft Glow) ===== */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05),
+    0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --shadow-base: 0 4px 6px -1px rgba(15, 23, 42, 0.06),
+    0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08),
+    0 4px 6px -4px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.1),
+    0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
 
   /* ===== Breakpoints (미디어 쿼리용) ===== */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
+  --breakpoint-lg: 920px;
+  --breakpoint-xl: 1024px;
 }
 
-/* ===== Dark Mode ===== */
+/* ===== Dark Mode (Calm Night Ocean) ===== */
 [data-theme='dark'] {
-  /* ===== Primary Colors ===== */
-  --color-primary-50: #1e3a8a;
-  --color-primary-100: #1e40af;
-  --color-primary-200: #1d4ed8;
-  --color-primary-300: #2563eb;
-  --color-primary-400: #3b82f6;
-  --color-primary-500: #60a5fa;
-  --color-primary-600: #93c5fd;
-  --color-primary-700: #bfdbfe;
-  --color-primary-800: #dbeafe;
-  --color-primary-900: #eff6ff;
+  /* ===== Primary Colors (Deep Calm Ocean) ===== */
+  --color-primary-50: #0c1929;
+  --color-primary-100: #0f2539;
+  --color-primary-200: #1e3a52;
+  --color-primary-300: #2d4f6b;
+  --color-primary-400: #3d6485;
+  --color-primary-500: #5589b3;
+  --color-primary-600: #7dacd0;
+  --color-primary-700: #a5cde8;
+  --color-primary-800: #cde5f5;
+  --color-primary-900: #e0f2fe;
 
-  /* ===== Navy Gray Scale ===== */
-  --color-gray-50: #05070d;
-  --color-gray-100: #0a0f1f;
-  --color-gray-200: #10172a;
-  --color-gray-300: #1a2440;
-  --color-gray-400: #2a3760;
-  --color-gray-500: #4f5d85;
-  --color-gray-600: #8a97b3;
-  --color-gray-700: #c0c9dd;
-  --color-gray-800: #e4e8f1;
-  --color-gray-900: #f8fafc;
+  /* ===== Navy Gray Scale (Soft Deep Sea) ===== */
+  --color-gray-50: #0f1419;
+  --color-gray-100: #1a1f2e;
+  --color-gray-200: #252d3d;
+  --color-gray-300: #364152;
+  --color-gray-400: #4f5b6e;
+  --color-gray-500: #6b788c;
+  --color-gray-600: #8896aa;
+  --color-gray-700: #a8b5c7;
+  --color-gray-800: #cbd5e1;
+  --color-gray-900: #e2e8f0;
 
-  /* ===== Background ===== */
-  --color-bg-primary: #05070d;
-  --color-bg-secondary: #0a0f1f;
-  --color-bg-tertiary: #10172a;
+  /* ===== Background (Deep Calm Ocean) ===== */
+  --color-bg-primary: #0a0e14;
+  --color-bg-secondary: #0f1419;
+  --color-bg-tertiary: #1a1f2e;
+
+  --accent-gradient: linear-gradient(135deg, #3d6485 0%, #5589b3 100%);
+  --header-overlay: rgba(26, 31, 46, 0.2);
+  --banner-overlay: linear-gradient(
+    to bottom,
+    rgba(15, 20, 25, 0.5) 0%,
+    rgba(26, 31, 46, 0.2) 30%,
+    transparent 50%,
+    rgba(37, 45, 61, 0.15) 75%,
+    rgba(54, 65, 82, 0.25) 100%
+  );
 
   /* ===== Text ===== */
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #c0c9dd;
-  --color-text-tertiary: #8a97b3;
-  --color-text-inverse: #05070d;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #0f172a;
 
   /* ===== Border ===== */
-  --color-border-light: #10172a;
-  --color-border-medium: #1a2440;
-  --color-border-dark: #2a3760;
+  --color-border-light: #252d3d;
+  --color-border-hover: #364152;
+  --color-border-dark: #1a1f2e;
 
   /* ===== Semantic ===== */
   --color-success: #34d399;
   --color-error: #f87171;
   --color-warning: #fbbf24;
-  --color-info: #60a5fa;
+  --color-info: #7dd3fc;
 
-  /* ===== Shadow ===== */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
-  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
-    0 2px 4px -2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
-    0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  /* ===== Shadow (Subtle Deep Glow) ===== */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
+    0 1px 2px -1px rgba(0, 0, 0, 0.25);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.35),
+    0 4px 6px -4px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
-    0 8px 10px -6px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    0 8px 10px -6px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
 }

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth/authStore';
 import { authApi } from '@/services/auth/auth.api';
-import type { UserInfo } from '@/types/user.types';
+import type { UserInfo } from '@/services/user/user.types';
 
 interface UseAuthReturn {
   // 상태

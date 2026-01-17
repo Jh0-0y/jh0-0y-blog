@@ -31,52 +31,54 @@ export const SearchBar = () => {
   }, []);
 
   return (
-    <div className={styles.searchBar}>
-      <div className={styles.iconWrapper}>
-        <svg
-          className={styles.searchIcon}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-      </div>
-
-      <input
-        ref={inputRef}
-        type="text"
-        className={styles.input}
-        placeholder="검색..."
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-
-      <div className={styles.actions}>
-        {inputValue && (
-          <button 
-            className={styles.clearButton} 
-            type="button"
-            onClick={clearSearch}
-            aria-label="검색어 지우기"
+    <div className={styles.searchWrapper}>
+      <div className={styles.searchBar}>
+        <div className={styles.iconWrapper}>
+          <svg
+            className={styles.searchIcon}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        )}
-        <kbd className={styles.shortcut}>⌘K</kbd>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+
+        <input
+          ref={inputRef}
+          type="text"
+          className={styles.input}
+          placeholder="검색..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+
+        <div className={styles.actions}>
+          {inputValue && (
+            <button 
+              className={styles.clearButton} 
+              type="button"
+              onClick={clearSearch}
+              aria-label="검색어 지우기"
+            >
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+          <kbd className={styles.shortcut}>⌘K</kbd>
+        </div>
       </div>
     </div>
   );

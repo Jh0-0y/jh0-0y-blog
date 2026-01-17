@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { usePostDeteils } from '../hooks/usePostDeteils';
 import { formatDate } from '../utils';
 import styles from './BlogPostPage.module.css';
@@ -6,6 +6,7 @@ import styles from './BlogPostPage.module.css';
 export const BlogPostPage = () => {
   const { id } = useParams<{ id: string }>();
   const postId = id ? parseInt(id, 10) : undefined;
+  const navigate = useNavigate();
 
   const { post, isLoading, error } = usePostDeteils(postId);
 
@@ -55,12 +56,13 @@ export const BlogPostPage = () => {
   return (
     <div className={styles.page}>
       {/* 뒤로가기 */}
-      <Link to="/" className={styles.backLink}>
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-        </svg>
-        <span>목록으로</span>
-      </Link>
+      <button
+        type="button"
+        className={styles.backLink}
+        onClick={() => navigate(-1)}
+      >
+        목록으로
+      </button>
 
       {/* 게시글 헤더 */}
       <header className={styles.header}>

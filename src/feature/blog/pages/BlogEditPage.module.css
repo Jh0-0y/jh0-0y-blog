@@ -229,6 +229,16 @@
   height: 14px;
 }
 
+.charCount {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.charCountError {
+  color: var(--color-error);
+  font-weight: var(--font-weight-medium);
+}
+
 .fieldError {
   font-size: var(--font-size-xs);
   color: var(--color-error);

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePostCreate } from '../hooks/usePostCreate';
 import { useStacks } from '../hooks/useStacks';
-import { STACK_GROUP_LABELS, STACK_GROUP_ORDER } from '../types/stack.enums';
+import { STACK_GROUP_LABELS, STACK_GROUP_ORDER } from '../../../services/stack/stack.enums';
+import { VALIDATION_LIMITS } from '../utils/postValidation';
 import type { PostType } from '../types/post.enums';
 import { MarkdownEditor } from '../components';
 import { StackManageModal } from '../components/stackModal/StackManageModal';
@@ -21,9 +22,12 @@ export const BlogWritePage = () => {
     isLoading,
     error,
     fieldErrors,
+    contentLengthError,
     updateField,
     addTag,
     removeTag,
+    addStack,
+    removeStack,
     toggleStatus,
     submit,
   } = usePostCreate();
@@ -35,9 +39,9 @@ export const BlogWritePage = () => {
   // 스택 토글
   const handleStackToggle = (stackName: string) => {
     if (form.stacks.includes(stackName)) {
-      updateField('stacks', form.stacks.filter((s) => s !== stackName));
+      removeStack(stackName);
     } else {
-      updateField('stacks', [...form.stacks, stackName]);
+      addStack(stackName);
     }
   };
 
@@ -132,25 +136,38 @@ export const BlogWritePage = () => {
 
         {/* 제목 */}
         <div className={styles.field}>
+          <div className={styles.labelRow}>
+            <label className={styles.label}>제목</label>
+            <span className={styles.charCount}>
+              {form.title.length}/{VALIDATION_LIMITS.TITLE_MAX}
+            </span>
+          </div>
           <input
             type="text"
             value={form.title}
             onChange={(e) => updateField('title', e.target.value)}
             placeholder="제목을 입력하세요"
             className={`${styles.titleInput} ${fieldErrors?.title ? styles.inputError : ''}`}
-            required
+            maxLength={VALIDATION_LIMITS.TITLE_MAX}
           />
           {fieldErrors?.title && <span className={styles.fieldError}>{fieldErrors.title}</span>}
         </div>
 
         {/* 요약 */}
         <div className={styles.field}>
+          <div className={styles.labelRow}>
+            <label className={styles.label}>요약</label>
+            <span className={styles.charCount}>
+              {form.excerpt.length}/{VALIDATION_LIMITS.EXCERPT_MAX}
+            </span>
+          </div>
           <textarea
             value={form.excerpt}
             onChange={(e) => updateField('excerpt', e.target.value)}
             placeholder="글을 간단히 요약해주세요 (목록에 표시됩니다)"
             className={`${styles.excerptInput} ${fieldErrors?.excerpt ? styles.inputError : ''}`}
             rows={2}
+            maxLength={VALIDATION_LIMITS.EXCERPT_MAX}
           />
           {fieldErrors?.excerpt && <span className={styles.fieldError}>{fieldErrors.excerpt}</span>}
         </div>
@@ -158,7 +175,9 @@ export const BlogWritePage = () => {
         {/* 스택 선택 */}
         <div className={styles.field}>
           <div className={styles.labelRow}>
-            <label className={styles.label}>스택</label>
+            <label className={styles.label}>
+              스택 ({form.stacks.length}/{VALIDATION_LIMITS.STACKS_MAX})
+            </label>
             <button
               type="button"
               onClick={() => setShowStackModal(true)}
@@ -171,6 +190,7 @@ export const BlogWritePage = () => {
               관리
             </button>
           </div>
+          {fieldErrors?.stacks && <span className={styles.fieldError}>{fieldErrors.stacks}</span>}
           {isStacksLoading ? (
             <div className={styles.stacksLoading}>스택 로딩중...</div>
           ) : groupedStacks ? (
@@ -204,7 +224,7 @@ export const BlogWritePage = () => {
               {form.stacks.map((stack) => (
                 <span key={stack} className={styles.selectedStack}>
                   {stack}
-                  <button type="button" onClick={() => handleStackToggle(stack)} className={styles.stackRemove}>
+                  <button type="button" onClick={() => removeStack(stack)} className={styles.stackRemove}>
                     ×
                   </button>
                 </span>
@@ -215,7 +235,10 @@ export const BlogWritePage = () => {
 
         {/* 태그 */}
         <div className={styles.field}>
-          <label className={styles.label}>태그 (공백 대신 _ 사용)</label>
+          <div className={styles.labelRow}>
+            <label className={styles.label}>태그 ({form.tags.length}/{VALIDATION_LIMITS.TAGS_MAX})</label>
+          </div>
+          {fieldErrors?.tags && <span className={styles.fieldError}>{fieldErrors.tags}</span>}
           <div className={styles.tagInputWrapper}>
             <input
               type="text"
@@ -245,13 +268,23 @@ export const BlogWritePage = () => {
 
         {/* 본문 에디터 */}
         <div className={styles.editorSection}>
-          <label className={styles.label}>본문</label>
+          <div className={styles.labelRow}>
+            <label className={styles.label}>본문</label>
+            <span className={`${styles.charCount} ${contentLengthError ? styles.charCountError : ''}`}>
+              {form.content.length}/{VALIDATION_LIMITS.CONTENT_MAX}
+            </span>
+          </div>
+          {contentLengthError && (
+            <span className={styles.fieldError}>{contentLengthError}</span>
+          )}
+          {fieldErrors?.content && !contentLengthError && (
+            <span className={styles.fieldError}>{fieldErrors.content}</span>
+          )}
           <MarkdownEditor
             value={form.content}
             onChange={(value) => updateField('content', value)}
             placeholder="내용을 작성하세요... (마크다운을 지원합니다)"
           />
-          {fieldErrors?.content && <span className={styles.fieldError}>{fieldErrors.content}</span>}
         </div>
 
         {/* 하단 액션 */}
@@ -259,7 +292,11 @@ export const BlogWritePage = () => {
           <Link to="/" className={styles.cancelButton}>
             취소
           </Link>
-          <button type="submit" className={styles.submitButton} disabled={isLoading}>
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isLoading || !!contentLengthError}
+          >
             {isLoading ? '저장 중...' : '발행하기'}
           </button>
         </div>

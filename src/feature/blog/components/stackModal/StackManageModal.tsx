@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { stackApi } from '../../api/stack.api';
-import { STACK_GROUP_LABELS, STACK_GROUP_ORDER } from '../../types/stack.enums';
-import type { StackGroup } from '../../types/stack.enums';
+import { STACK_GROUP_LABELS, STACK_GROUP_ORDER } from '../../../../services/stack/stack.enums';
+import type { StackGroup } from '../../../../services/stack/stack.enums';
 import type { StackResponse } from '../../api/stack.response';
 import { useToast } from '@/utils/toast/useToast';
 import styles from './StackManageModal.module.css';

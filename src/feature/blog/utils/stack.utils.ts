@@ -1,4 +1,4 @@
-import type { StackGroup } from '../types/stack.enums';
+import type { StackGroup } from '../../../services/stack/stack.enums';
 
 /**
  * 스택 그룹 우선순위
@@ -10,8 +10,9 @@ const STACK_GROUP_PRIORITY: Record<StackGroup, number> = {
   LIBRARY: 3,
   DATABASE: 4,
   DEVOPS: 5,
-  TOOL: 6,
-  ETC: 7,
+  KNOWLEDGE: 6,
+  TOOL: 7,
+  ETC: 8
 };
 
 /**

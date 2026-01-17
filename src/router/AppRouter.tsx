@@ -9,18 +9,32 @@ import { ProfilePage } from '@/feature/portfolio/pages';
 
 import { NotFoundPage } from '@/pages/notfound';
 import { ProjectDetailPage } from '@/feature/portfolio/pages/ProjectDetailPage';
+import ToastTest from '@/pages/test/ToastTest';
+// import ScrollToTop from '@/utils/scrollerToTop/ScrollerToTop';
 
 export const AppRouter = () => (
   <BrowserRouter basename="/">
+    {/* <ScrollToTop /> */}
     <Routes>
       {/* 블로그 (공개) */}
       <Route path="/" element={<BlogLayout />}>
         {/* 전체 글 */}
         <Route index element={<BlogHomePage />} />
         {/* 필터링된 글 */}
-        <Route path=":postType" element={<BlogHomePage />} />
-        <Route path=":group/:stack" element={<BlogHomePage />} />
-        <Route path=":group/:stack/:postType" element={<BlogHomePage />} />
+        <Route path=":postType">
+          <Route index element={<BlogHomePage />} />
+          <Route path="post/:id" element={<BlogPostPage />} />
+        </Route>
+
+        <Route path=":group/:stack">
+          <Route index element={<BlogHomePage />} />
+          <Route path="post/:id" element={<BlogPostPage />} />
+        </Route>
+
+        <Route path=":group/:stack/:postType">
+          <Route index element={<BlogHomePage />} />
+          <Route path="post/:id" element={<BlogPostPage />} />
+        </Route>
         {/* 글 상세 */}
         <Route path="post/:id" element={<BlogPostPage />} />
         
@@ -53,6 +67,10 @@ export const AppRouter = () => (
         <GuestRoute>
           <SignUpPage />
         </GuestRoute>
+      } />
+
+      <Route path="test" element={
+        <ToastTest />
       } />
 
       <Route path="*" element={<NotFoundPage />} />

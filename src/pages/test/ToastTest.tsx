@@ -1,5 +1,6 @@
 import { useToast } from '@/utils/toast/useToast';
 import styles from './ToastTest.module.css';
+import { usePageTransition } from '@/utils/loader/PageTransitionProvider';
 
 const ToastTest = () => {
   const toast = useToast();
@@ -10,8 +11,14 @@ const ToastTest = () => {
     setTimeout(() => toast.warning('세 번째 토스트'), 1000);
   };
 
+  const { navigateWithTransition } = usePageTransition();
+
+
   return (
     <div className={styles.container}>
+      <button onClick={() => navigateWithTransition('/write')}>
+        글쓰기 (전환효과)
+      </button>
       <h1 className={styles.title}>토스트 테스트</h1>
       <div className={styles.buttonGroup}>
         <button

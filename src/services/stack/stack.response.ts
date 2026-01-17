@@ -1,4 +1,4 @@
-import type { StackGroup } from '../types/stack.enums';
+import type { StackGroup } from './stack.enums';
 
 /**
  * 스택 기본 응답

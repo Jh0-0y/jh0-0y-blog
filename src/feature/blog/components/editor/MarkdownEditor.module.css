@@ -203,6 +203,11 @@
   font-style: italic;
 }
 
+/* 파일 입력 숨김 */
+.fileInput {
+  display: none;
+}
+
 /* 반응형 */
 @media (max-width: 640px) {
   .toolbar {

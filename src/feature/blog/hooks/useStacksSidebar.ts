@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/services/core/api.error';
 import { stackApi } from '../api/stack.api';
 import type { PopularStack, StackWithCount } from '../api/stack.response';
-import type { StackGroup } from '../types/stack.enums';
+import type { StackGroup } from '../../../services/stack/stack.enums';
 
 interface UseStacksSidebarReturn {
   popularStacks: PopularStack[];
